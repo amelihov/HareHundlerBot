@@ -20,7 +20,7 @@ namespace HareHundlerBot
     {
         private static string token { get; set; } = "5300197547:AAE_jOnQmJ0foXGGZmbfVEbdlvApi5zDiPU";
 
-        private static Regex rg = new Regex(@"^[АВЕКМНОРСТУХ]\d{3}(?<!000)[АВЕКМНОРСТУХ]{2}\d{2,3}$",
+        private static Regex rg = new Regex(@"^[АВЕКМНОРСТУХETOPAHKLXCBM]\d{3}(?<!000)[АВЕКМНОРСТУХETOPAHKLXCBM]{2}\d{2,3}$",
             RegexOptions.IgnoreCase);
 
         private static TelegramBotClient _botClient = new TelegramBotClient(token);
@@ -83,7 +83,14 @@ namespace HareHundlerBot
 
                 if (message.Text == fourthButton)
                 {
-                    await botClient.SendTextMessageAsync(message.Chat, "Список машин из чёного списка:", replyMarkup: GetButtons());
+                    if (SignBlackList.Count == 0)
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat, "Список пуст.");
+
+                        return;
+                    }
+
+                    await botClient.SendTextMessageAsync(message.Chat, "Список машин из чёрного списка:", replyMarkup: GetButtons());
 
                     StringBuilder s = new();
                     foreach (var black in SignBlackList)
